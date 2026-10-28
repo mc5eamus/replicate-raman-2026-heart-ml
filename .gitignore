@@ -219,3 +219,9 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Public source data are downloaded locally, not redistributed.
+/data/raw/
+/.model-*/
+/tests/.analysis-output-*/
+/results/stability_paper_chunks/

@@ -1,0 +1,3 @@
+dataset,raw_rows,clean_rows,features,positive,prevalence,sha256,source
+cleveland,303,297,13,137,0.4612794612794613,a74b7efa387bc9d108d7d0115d831fe9b414b29ae7124f331b622b4efa0427c8,https://archive.ics.uci.edu/ml/machine-learning-databases/heart-disease/processed.cleveland.data
+framingham,4240,3658,15,557,0.15226899945325315,2c0e57dc0361b420becf1facec0a054af06c420eae0ae2faf0fdc8591fadb018,https://raw.githubusercontent.com/sta210-sp20/datasets/master/framingham.csv
