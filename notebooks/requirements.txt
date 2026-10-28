@@ -1,0 +1,14 @@
+# Python 3.12; CPU PyTorch wheels (no CUDA runtime).
+--extra-index-url https://download.pytorch.org/whl/cpu
+numpy==2.2.6
+pandas==2.2.3
+scikit-learn==1.6.1
+imbalanced-learn==0.13.0
+xgboost==2.1.4
+torch==2.10.0+cpu
+shap==0.48.0
+matplotlib==3.10.3
+seaborn==0.13.2
+# Execution tooling, not additional analysis libraries.
+nbconvert==7.17.2
+ipykernel==7.4.0
