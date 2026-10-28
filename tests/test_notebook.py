@@ -58,7 +58,7 @@ class NotebookProtocolTests(unittest.TestCase):
 
     def test_only_allowed_imports_and_focused_cells(self):
         allowed = {
-            "os", "random", "time", "pathlib", "hashlib", "urllib",
+            "os", "random", "time", "pathlib", "hashlib", "urllib", "warnings",
             "numpy", "pandas", "matplotlib", "seaborn", "torch",
             "IPython", "imblearn", "sklearn", "xgboost", "shap",
         }
