@@ -13,7 +13,7 @@ from sklearn.base import clone, is_classifier
 from sklearn.datasets import make_classification
 from sklearn.model_selection import GridSearchCV
 
-from raman.analysis import (METRICS, compare_paper, evaluate, parse_seeds,
+from raman.analysis import (METRICS, PAPER_TARGETS, compare_paper, evaluate, parse_seeds,
                             rank_wins, run_analysis, shap_features, summarize)
 from raman.models import MODELS, PAPER_PARAMS, TorchClassifier, make_estimator
 
@@ -42,6 +42,13 @@ class AnalysisTests(unittest.TestCase):
         self.assertAlmostEqual(scores["auroc"], 0.75)
         self.assertAlmostEqual(scores["brier"], 0.158125)
         self.assertEqual(evaluate([0, 1], [0.1, 0.1])["precision"], 0)
+
+    def test_complete_paper_comparison_targets(self):
+        for dataset in PAPER_PARAMS:
+            for model in MODELS:
+                self.assertEqual(set(PAPER_TARGETS[dataset][model]), set(METRICS))
+        self.assertEqual(PAPER_TARGETS["cleveland"]["LR"]["brier"], 0.2096)
+        self.assertEqual(PAPER_TARGETS["framingham"]["XGB"]["precision"], 0.2456)
 
     def test_exact_paper_parameters_and_pipeline_order(self):
         for dataset, parameters in PAPER_PARAMS.items():

@@ -223,3 +223,4 @@ __marimo__/
 /data/raw/
 /.model-*/
 /tests/.analysis-output-*/
+/results/stability_paper_chunks/

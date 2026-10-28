@@ -14,17 +14,25 @@ from sklearn.model_selection import RepeatedStratifiedKFold, train_test_split
 from .models import MODELS, make_estimator
 
 METRICS = ("accuracy", "precision", "recall", "f1", "mcc", "auroc", "brier")
-PAPER_TARGETS = {
-    "cleveland": {
-        "RF": {"auroc": 0.9275}, "LR": {"auroc": 0.9475, "accuracy": 0.8667, "mcc": 0.7321},
-        "KNN": {"auroc": 0.9531, "brier": 0.0942},
-        "XGB": {"auroc": 0.9364}, "NN": {"auroc": 0.8867},
-    },
+PAPER_METRICS = {
     "framingham": {
-        "RF": {"auroc": 0.6929, "brier": 0.1750}, "LR": {"auroc": 0.7234},
-        "KNN": {"auroc": 0.6741}, "XGB": {"auroc": 0.6882},
-        "NN": {"auroc": 0.6625, "accuracy": 0.7719},
+        "RF": (0.7391, 0.2872, 0.4865, 0.3612, 0.2222, 0.6929, 0.1750),
+        "LR": (0.6803, 0.2764, 0.6847, 0.3938, 0.2698, 0.7234, 0.2138),
+        "KNN": (0.6489, 0.2448, 0.6306, 0.3526, 0.2079, 0.6741, 0.2271),
+        "XGB": (0.6899, 0.2456, 0.5045, 0.3304, 0.1762, 0.6882, 0.2255),
+        "NN": (0.7719, 0.2812, 0.3243, 0.3013, 0.1664, 0.6625, 0.2048),
     },
+    "cleveland": {
+        "RF": (0.8333, 0.8462, 0.7857, 0.8148, 0.6652, 0.9275, 0.1122),
+        "LR": (0.8667, 0.8571, 0.8571, 0.8571, 0.7321, 0.9475, 0.2096),
+        "KNN": (0.8333, 0.8462, 0.7857, 0.8148, 0.6652, 0.9531, 0.0942),
+        "XGB": (0.8333, 0.8750, 0.7500, 0.8077, 0.6683, 0.9364, 0.1087),
+        "NN": (0.8500, 0.8276, 0.8571, 0.8421, 0.6997, 0.8867, 0.1360),
+    },
+}
+PAPER_TARGETS = {
+    dataset: {model: dict(zip(METRICS, values)) for model, values in models.items()}
+    for dataset, models in PAPER_METRICS.items()
 }
 GROUPS = ["dataset", "phase", "balanced", "approach", "model"]
 KEYS = GROUPS + ["split", "seed"]

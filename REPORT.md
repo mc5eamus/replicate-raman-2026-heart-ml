@@ -142,9 +142,140 @@ Feature-importance differences are reported rather than tuned away.
 
 ### Stability execution status
 
-The default script requests the full 500-split experiment and nested repeated
-CV. Execution coverage and limitations are reported separately below; merely
-requesting a run is not evidence that it has completed.
+The checked-in `results/stability_smoke/` run completed **280 fits**:
+seeds 0–4, both datasets, all five models, both approaches, both balancing
+settings, and **one repeat of two-fold CV**. It took approximately 182 seconds.
+The complete 20-fit single-split run took approximately 22 seconds.
+These measurements exclude dependency installation.
+
+Exploratory balanced, fixed-setting holdout means, **five splits only**:
+
+| Dataset | Model | Mean AUROC | AUROC SD | Mean accuracy | Mean Brier | AUROC win fraction |
+|---|---|---:|---:|---:|---:|---:|
+| Cleveland | RF | 0.9048 | 0.0144 | 0.8300 | 0.1265 | 0.0 |
+| Cleveland | LR | 0.9080 | 0.0166 | 0.8533 | 0.2140 | 0.2 |
+| Cleveland | KNN | 0.9064 | 0.0166 | 0.8433 | 0.1218 | 0.4 |
+| Cleveland | XGB | 0.9056 | 0.0141 | 0.8300 | 0.1236 | 0.2 |
+| Cleveland | NN | 0.9058 | 0.0149 | 0.8267 | 0.1223 | 0.2 |
+| Framingham | RF | 0.6894 | 0.0228 | 0.7533 | 0.1690 | 0.0 |
+| Framingham | LR | 0.6853 | 0.0280 | 0.6631 | 0.2128 | 0.0 |
+| Framingham | KNN | 0.6315 | 0.0316 | 0.6628 | 0.2158 | 0.0 |
+| Framingham | XGB | 0.7039 | 0.0208 | 0.7128 | 0.2225 | 0.8 |
+| Framingham | NN | 0.6891 | 0.0300 | 0.6653 | 0.2084 | 0.2 |
+
+The smoke directory includes raw scores, mean/SD/percentile summaries for all
+seven metrics, paired rankings, paper comparisons, and AUROC distribution
+figures for each phase/approach/balancing setting. The CV portion exercises the
+nested evaluation path but **is not the requested repeated 5×10-fold estimate**.
+No scientific conclusion follows from the smoke-run ranking or containment flags.
+
+### Full fixed-parameter stability: completed
+
+`results/stability_paper/` contains **11,000 fits**: 500 held-out splits and
+50 outer CV folds × two datasets × five models × two balancing settings,
+using the fixed paper parameters (and the specified NN surrogate). Four
+parallel seed blocks plus CV completed in approximately **495 seconds**.
+The consolidated result has one row per fit, with duplicate seed-zero
+holdouts from the CV job removed. Its manifest supports resumption through
+the ordinary CLI; intermediate job outputs are not committed.
+
+Balanced 500-split results:
+
+| Dataset | Model | Mean AUROC ± SD | AUROC 2.5–97.5% | Mean accuracy | Mean Brier | AUROC #1 |
+|---|---|---|---|---:|---:|---:|
+| Cleveland | RF | 0.8999 ± 0.0352 | 0.8237–0.9618 | 0.8201 | 0.1287 | 10.7% |
+| Cleveland | LR | 0.9027 ± 0.0350 | 0.8275–0.9626 | 0.8324 | 0.2136 | 18.8% |
+| Cleveland | KNN | 0.9048 ± 0.0349 | 0.8315–0.9626 | 0.8304 | 0.1222 | 23.2% |
+| Cleveland | XGB | 0.9060 ± 0.0347 | 0.8381–0.9654 | 0.8269 | 0.1238 | 33.0% |
+| Cleveland | NN | 0.8999 ± 0.0355 | 0.8242–0.9604 | 0.8294 | 0.1264 | 14.3% |
+| Framingham | RF | 0.6831 ± 0.0237 | 0.6389–0.7293 | 0.7475 | 0.1717 | 2.4% |
+| Framingham | LR | 0.6906 ± 0.0236 | 0.6452–0.7433 | 0.6663 | 0.2122 | 21.3% |
+| Framingham | KNN | 0.6336 ± 0.0243 | 0.5885–0.6835 | 0.6623 | 0.2142 | 0.4% |
+| Framingham | XGB | 0.6982 ± 0.0239 | 0.6521–0.7428 | 0.7235 | 0.2225 | 59.1% |
+| Framingham | NN | 0.6892 ± 0.0243 | 0.6422–0.7367 | 0.6606 | 0.2103 | 16.8% |
+
+`stability_summary.csv` also includes SD and percentiles for accuracy and Brier
+(and all remaining metrics), separately for every ablation and CV context.
+Wins split exact ties; percentages therefore need not represent integer wins.
+
+**Interval-containment findings, fixed balanced approach:** all ten paper
+AUROC values satisfy the issue's reproduction criterion. Cleveland LR accuracy
+and MCC, Cleveland KNN Brier, and Framingham RF Brier also fall inside their
+500-split intervals. **Framingham NN accuracy 0.7719 does not:** its interval
+is 0.6216–0.6974. This is a material mismatch for our assumed architecture.
+Of the additional full-table targets, Framingham RF/KNN recall and NN
+precision/recall/F1 also fall outside their respective intervals. All Cleveland
+full-table targets are contained. These are descriptive containment results,
+not proof that the authors used the same implementation.
+
+**Ranking:** the paper's Cleveland winner KNN wins only 23.2% of splits, and
+no Cleveland model wins a majority. The models are operationally
+“statistically indistinguishable” under the issue's ranking criterion, not a
+formal equivalence result. The paper's Framingham winner LR wins only 21.3%;
+its top-model ranking is likewise unsupported. Instead, XGBoost wins 59.1%,
+a strict majority under our chosen protocol. Thus reproducing the paper's
+AUROC ranges does **not** reproduce its model ranking.
+
+### Repeated 5×10-fold CV and balancing ablation: completed for fixed settings
+
+Balanced outer-fold AUROC estimates (50 folds, not 50 independent samples):
+
+| Dataset | Model | Mean AUROC ± SD |
+|---|---|---|
+| Cleveland | RF | 0.9007 ± 0.0636 |
+| Cleveland | LR | 0.9033 ± 0.0618 |
+| Cleveland | KNN | 0.9087 ± 0.0623 |
+| Cleveland | XGB | 0.9061 ± 0.0629 |
+| Cleveland | NN | 0.9019 ± 0.0630 |
+| Framingham | RF | 0.6856 ± 0.0390 |
+| Framingham | LR | 0.6918 ± 0.0345 |
+| Framingham | KNN | 0.6388 ± 0.0335 |
+| Framingham | XGB | 0.7012 ± 0.0386 |
+| Framingham | NN | 0.6856 ± 0.0335 |
+
+Removing resampling barely changes Cleveland mean AUROC (all model differences
+below 0.0011). Framingham changes substantially: unbalanced LR mean AUROC
+is **0.7300** versus 0.6906 balanced, and LR wins **85.2%** of unbalanced splits.
+Unbalanced RF mean AUROC is 0.7168 versus 0.6831 balanced. The model ranking
+is therefore sensitive to balancing. Framingham Brier scores also decrease
+without resampling (e.g. LR 0.1189 versus 0.2122); training prior shift and
+the imbalanced outcome distribution matter. High accuracy without balancing
+is not sufficient evidence of good disease detection.
+
+### Remaining execution
+
+The **fully tuned** 500-split/5×10-fold analysis remains unexecuted. Five-fold
+tuning was executed for the complete single-split reproduction and the smoke
+analysis, but not repeated across all 500 seeds. Extrapolation from the smoke
+workload suggests roughly four CPU-hours for both approaches and ablations
+on this runner; this is an estimate. Consequently full-stability conclusions
+above apply only to fixed reported parameters and our fixed NN, not to
+per-split hyperparameter selection.
+
+To reproduce the completed fixed-setting design:
+
+```bash
+python scripts/03_stability.py --approaches paper --output-dir results/stability_paper
+```
+
+To execute the full design including nested tuning:
+
+```bash
+python scripts/03_stability.py --output-dir results/full
+```
+
+Re-run the same command to resume interrupted fits. The full command is
+deliberately separate from both completed result directories. Once it completes,
+use `results/full/stability_paper_comparison.csv` **holdout** rows (`n=500`) to
+apply the requested reproduction rule, and `stability_rankings.csv` to assess
+whether the paper's top model wins a strict majority of splits among all five.
+Consider fixed and tuned approaches separately; ablations are sensitivity
+analyses, not substitutes for the balanced primary analysis.
+
+**Confirmation status:** all paper AUROCs meet the issue's interval rule under
+the fixed-setting reproduction, but neither dataset's paper top-model ranking
+is supported. The Framingham NN accuracy is not reproduced. Confirmation under
+the independently tuned protocol remains undetermined.
 
 ## Interpretation limits
 

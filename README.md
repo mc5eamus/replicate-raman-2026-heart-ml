@@ -58,6 +58,10 @@ runs separate from full results, and check sample counts before interpretation.
 - `*_settings.json`: exact run selection and input fingerprints.
 
 See [`REPORT.md`](REPORT.md) for executed results, assumptions, and limitations.
+Checked-in results include the complete single-split reproduction,
+`results/stability_paper/` (500 splits + 5×10 CV, fixed settings, both balancing
+variants), and `results/stability_smoke/` (five splits + 1×2 CV, fixed and tuned).
+The full 500-split **tuned** experiment has not been executed.
 Raw patient records, fitted models, and virtual environments are not committed.
 
 Tests use standard-library `unittest` and synthetic data; no network is needed:
