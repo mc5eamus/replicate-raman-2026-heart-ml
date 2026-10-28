@@ -1,10 +1,14 @@
 """Model protocol tests; no downloads and no reliance on unpublished results."""
 
 import shutil
+import sys
 import unittest
 from pathlib import Path
 from unittest.mock import patch
 from uuid import uuid4
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "src"))
 
 import numpy as np
 import pandas as pd
@@ -16,9 +20,6 @@ from sklearn.model_selection import GridSearchCV
 from raman.analysis import (METRICS, PAPER_TARGETS, compare_paper, evaluate, parse_seeds,
                             rank_wins, run_analysis, shap_features, summarize)
 from raman.models import MODELS, PAPER_PARAMS, TorchClassifier, make_estimator
-
-ROOT = Path(__file__).resolve().parents[1]
-
 
 class AnalysisTests(unittest.TestCase):
     @classmethod

@@ -285,3 +285,15 @@ codes, balancing-induced prior shift, and small test sets constrain inference.
 Brier is overall probabilistic error, not calibration alone; an unbalanced
 baseline can improve Brier simply through lower event prevalence. No external
 validation or clinical utility assessment is performed.
+
+## Validation
+
+Six offline data-check tests and eleven model/protocol tests pass. Tests cover
+missingness, deduplication, hard count/target/hash gates, exact paper settings,
+all five estimators, fold-local resampling, NN determinism and tuning, metrics,
+paired ties, empirical summaries, SHAP, repeated CV, and resumable output.
+The model tests run without a `PYTHONPATH` override. Actual CLI runs and
+resume-without-refitting checks succeeded for the saved analyses.
+`pip check` found no dependency conflicts. The independent code review found
+no significant issues; dependency advisory checks, secret scanning, and CodeQL
+reported no findings.

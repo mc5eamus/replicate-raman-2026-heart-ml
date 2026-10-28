@@ -134,6 +134,8 @@ def make_estimator(dataset, model, seed=42, balanced=True, approach="paper",
     estimator.set_params(**PAPER_PARAMS[dataset].get(model, {}))
     steps = []
     if balanced:
+        # Default SMOTE reaches 1:1; the requested undersampler then preserves
+        # that ratio (a no-op), because no intermediate ratios were specified.
         steps.extend([
             ("smote", SMOTE(random_state=seed)),
             ("undersample", RandomUnderSampler(random_state=seed)),
