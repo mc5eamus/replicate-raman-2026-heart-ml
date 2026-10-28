@@ -1,0 +1,14 @@
+feature,mean_abs_shap
+thal,0.78192747
+ca,0.69477373
+cp,0.6719929
+chol,0.2879103
+slope,0.26932162
+age,0.24473971
+oldpeak,0.22879355
+exang,0.17941883
+restecg,0.16624753
+sex,0.16028924
+thalach,0.10402957
+trestbps,0.0726301
+fbs,0.0
