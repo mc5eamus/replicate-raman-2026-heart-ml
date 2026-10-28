@@ -221,6 +221,5 @@ __marimo__/
 
 # Public source data are downloaded locally, not redistributed.
 /data/raw/
-/.model-test-venv/
-/.model-scratch/
+/.model-*/
 /tests/.analysis-output-*/

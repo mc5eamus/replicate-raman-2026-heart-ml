@@ -1,0 +1,38 @@
+{
+  "datasets": [
+    "cleveland",
+    "framingham"
+  ],
+  "fingerprints": {
+    "cleveland": "63c18c6e1b8e9a5a3e32c8d64ce1d06dd2b70f59a37fed98e4bcf8328e278fc9",
+    "framingham": "21154899e6fd1ef9f9ac3bc5834d3b9164b53816686ad2dc49fe8728667bb068"
+  },
+  "models": [
+    "LR",
+    "RF",
+    "KNN",
+    "XGB",
+    "NN"
+  ],
+  "approaches": [
+    "paper",
+    "tuned"
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "balances": [
+    true,
+    false
+  ],
+  "include_cv": true,
+  "cv_folds": 2,
+  "cv_repeats": 1,
+  "cv_seed": 42,
+  "explain": false,
+  "protocol": "fold-local-v1"
+}

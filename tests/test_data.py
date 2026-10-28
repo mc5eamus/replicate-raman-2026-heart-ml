@@ -12,12 +12,16 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from raman.data import (
-    CLEVELAND_COLUMNS, FRAMINGHAM_COLUMNS, DataValidationError,
+    CLEVELAND_COLUMNS, FRAMINGHAM_COLUMNS, SOURCES, DataValidationError,
     clean_dataset, download, sha256, split_xy,
 )
 
 
 class DataTests(unittest.TestCase):
+    def test_source_fingerprints_are_sha256(self):
+        for _, _, fingerprint in SOURCES.values():
+            self.assertRegex(fingerprint, r"^[0-9a-f]{64}$")
+
     def test_cleveland_missing_and_binarization(self):
         frame = pd.DataFrame([[1] * 14 for _ in range(303)], columns=CLEVELAND_COLUMNS)
         frame["num"] = [4] * 137 + [0] * 166
